@@ -457,8 +457,15 @@ if  __name__ == "__main__":
     img = Image.open(imgfile).convert('RGB')
     sized = img.resize((608, 608))
     from tool.utils import *
-
-    boxes = do_detect(model, sized, 0.5, n_classes,0.4, use_cuda)
-
+    print(imgfile)
+    t = imgfile.split('/')
+    print(t[3])
+    splitted_name = os.path.splitext(t[3])
+    print(splitted_name[0])
+    p = '/content/pytorch-YOLOv4/detect/'+splitted_name[0]+'.txt'
+    file = open(p, 'w')
+    print(p)
+    boxes = do_detect(model, sized, 0.5, n_classes,0.5, use_cuda)
+    print(boxes)
     class_names = load_class_names(namesfile)
-    plot_boxes(img, boxes, 'predictions.jpg', class_names)
+    plot_boxes(p, img, boxes, 'predictions.jpg', class_names)

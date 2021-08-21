@@ -332,7 +332,7 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
     return img
 
 
-def plot_boxes(img, boxes, savename=None, class_names=None):
+def plot_boxes(p, img, boxes, savename=None, class_names=None):
     colors = torch.FloatTensor([[1, 0, 1], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0]]);
 
     def get_color(c, x, max_val):
@@ -352,7 +352,10 @@ def plot_boxes(img, boxes, savename=None, class_names=None):
         y1 = (box[1] - box[3] / 2.0) * height
         x2 = (box[0] + box[2] / 2.0) * width
         y2 = (box[1] + box[3] / 2.0) * height
-
+        x1 = int(x1)
+        y1 = int(y1)
+        x2 = int(x2)
+        y2 = int(y2)
         rgb = (255, 0, 0)
         if len(box) >= 7 and class_names:
             cls_conf = box[5]
@@ -365,6 +368,12 @@ def plot_boxes(img, boxes, savename=None, class_names=None):
             blue = get_color(0, offset, classes)
             rgb = (red, green, blue)
             draw.text((x1, y1), class_names[cls_id], fill=rgb)
+            text_f = '{} {:.1f} {} {} {} {}'.format(class_names[cls_id], cls_conf * 100, x1, y1, x2, y2)
+            print(text_f)
+            file = open(p, 'a')
+            file.write(text_f)
+            file.write("\n")
+            print('come')
         draw.rectangle([x1, y1, x2, y2], outline=rgb)
     if savename:
         print("save plot results to %s" % savename)
